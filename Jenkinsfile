@@ -3,53 +3,59 @@ pipeline {
 
     environment {
         AWS_REGION = 'us-west-1'
-        ECR_REGISTRY = '975050024946.dkr.ecr.us-west-1.amazonaws.com'
-        IMAGE_TAG = 'latest'
+        ECR_FRONTEND_REPO = '975050024946.dkr.ecr.us-west-1.amazonaws.com/frontend-app'
+        ECR_HELLO_REPO = '975050024946.dkr.ecr.us-west-1.amazonaws.com/hello-service'
+        ECR_PROFILE_REPO = '975050024946.dkr.ecr.us-west-1.amazonaws.com/profile-service'
     }
 
     stages {
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
                 git branch: 'main', url: 'https://github.com/reshmanavale/Project-MERN-Orchestration-and-Scaling.git'
-            }
-        }
-
-        stage('Build Docker Images') {
-            steps {
-                script {
-                    // Build all services
-                    sh '''
-                    docker build -t hello-service ./backend/hello-service
-                    docker build -t profile-service ./backend/profile-service
-                    docker build -t frontend ./frontend
-                    '''
-                }
             }
         }
 
         stage('Login to ECR') {
             steps {
                 script {
-                    sh 'aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY'
+                    sh '''
+                        aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin 975050024946.dkr.ecr.$AWS_REGION.amazonaws.com
+                    '''
                 }
             }
         }
 
-        stage('Tag and Push Images to ECR') {
+        stage('Build Docker Images') {
             steps {
                 script {
                     sh '''
-                    docker tag hello-service:latest $ECR_REGISTRY/hello-service:$IMAGE_TAG
-                    docker push $ECR_REGISTRY/hello-service:$IMAGE_TAG
-
-                    docker tag profile-service:latest $ECR_REGISTRY/profile-service:$IMAGE_TAG
-                    docker push $ECR_REGISTRY/profile-service:$IMAGE_TAG
-
-                    docker tag frontend:latest $ECR_REGISTRY/frontend-app:$IMAGE_TAG
-                    docker push $ECR_REGISTRY/frontend-app:$IMAGE_TAG
+                        docker build -t $ECR_FRONTEND_REPO:latest ./frontend
+                        docker build -t $ECR_HELLO_REPO:latest ./backend/hello-service
+                        docker build -t $ECR_PROFILE_REPO:latest ./backend/profile-service
                     '''
                 }
             }
+        }
+
+        stage('Push to ECR') {
+            steps {
+                script {
+                    sh '''
+                        docker push $ECR_FRONTEND_REPO:latest
+                        docker push $ECR_HELLO_REPO:latest
+                        docker push $ECR_PROFILE_REPO:latest
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        failure {
+            echo 'Pipeline failed.'
+        }
+        success {
+            echo 'Pipeline completed successfully.'
         }
     }
 }
