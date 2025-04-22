@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git url: 'https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git', branch: 'main'
+                git url: 'https://github.com/reshmanavale/Project-MERN-Orchestration-and-Scaling.git', branch: 'main'
             }
         }
 
