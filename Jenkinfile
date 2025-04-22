@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/YourGitHubUsername/SampleMERNwithMicroservices.git'
+                git branch: 'main', url: 'https://github.com/reshmanavale/Project-MERN-Orchestration-and-Scaling.git'
             }
         }
 
