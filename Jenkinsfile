@@ -2,60 +2,66 @@ pipeline {
     agent any
 
     environment {
-        AWS_REGION = 'us-west-1'
-        ECR_FRONTEND_REPO = '975050024946.dkr.ecr.us-west-1.amazonaws.com/frontend-app'
-        ECR_HELLO_REPO = '975050024946.dkr.ecr.us-west-1.amazonaws.com/hello-service'
-        ECR_PROFILE_REPO = '975050024946.dkr.ecr.us-west-1.amazonaws.com/profile-service'
+        AWS_ACCESS_KEY_ID     = 'AWS_ACCESS_KEY_ID'
+        AWS_SECRET_ACCESS_KEY = 'AWS_SECRET_ACCESS_KEY'
+        AWS_REGION            = 'us-west-1'
+        ECR_REGISTRY          = '975050024946.dkr.ecr.us-west-1.amazonaws.com'
     }
 
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/reshmanavale/Project-MERN-Orchestration-and-Scaling.git'
+                git url: 'https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git', branch: 'main'
             }
         }
 
-        stage('Login to ECR') {
+        stage('Login to AWS ECR') {
             steps {
-                script {
+                sh '''
+                    aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+                    aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+                    aws configure set region $AWS_REGION
+
+                    aws ecr get-login-password --region $AWS_REGION | \
+                    docker login --username AWS --password-stdin $ECR_REGISTRY
+                '''
+            }
+        }
+
+        stage('Build and Push hello-service') {
+            steps {
+                dir('backend/helloService') {
                     sh '''
-                        aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin 975050024946.dkr.ecr.$AWS_REGION.amazonaws.com
+                        docker build -t hello-service .
+                        docker tag hello-service:latest $ECR_REGISTRY/hello-service:latest
+                        docker push $ECR_REGISTRY/hello-service:latest
                     '''
                 }
             }
         }
 
-        stage('Build Docker Images') {
+        stage('Build and Push profile-service') {
             steps {
-                script {
+                dir('backend/profileService') {
                     sh '''
-                        docker build -t $ECR_FRONTEND_REPO:latest ./frontend
-                        docker build -t $ECR_HELLO_REPO:latest ./backend/hello-service
-                        docker build -t $ECR_PROFILE_REPO:latest ./backend/profile-service
+                        docker build -t profile-service .
+                        docker tag profile-service:latest $ECR_REGISTRY/profile-service:latest
+                        docker push $ECR_REGISTRY/profile-service:latest
                     '''
                 }
             }
         }
 
-        stage('Push to ECR') {
+        stage('Build and Push frontend') {
             steps {
-                script {
+                dir('frontend') {
                     sh '''
-                        docker push $ECR_FRONTEND_REPO:latest
-                        docker push $ECR_HELLO_REPO:latest
-                        docker push $ECR_PROFILE_REPO:latest
+                        docker build -t frontend-app .
+                        docker tag frontend-app:latest $ECR_REGISTRY/frontend-app:latest
+                        docker push $ECR_REGISTRY/frontend-app:latest
                     '''
                 }
             }
-        }
-    }
-
-    post {
-        failure {
-            echo 'Pipeline failed.'
-        }
-        success {
-            echo 'Pipeline completed successfully.'
         }
     }
 }
