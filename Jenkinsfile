@@ -2,65 +2,38 @@ pipeline {
     agent any
 
     environment {
-        AWS_ACCESS_KEY_ID     = 'AWS_ACCESS_KEY_ID'
-        AWS_SECRET_ACCESS_KEY = 'AWS_SECRET_ACCESS_KEY'
-        AWS_REGION            = 'us-west-1'
-        ECR_REGISTRY          = '975050024946.dkr.ecr.us-west-1.amazonaws.com'
+        IMAGE_TAG = "latest"
     }
 
     stages {
-        stage('Checkout Code') {
+        stage('Clone Repository') {
             steps {
-                git url: 'https://github.com/reshmanavale/Project-MERN-Orchestration-and-Scaling.git', branch: 'main'
+                git branch: 'main', url: 'https://github.com/reshmanavale/Project-MERN-Orchestration-and-Scaling.git'
             }
         }
 
-        stage('Login to AWS ECR') {
+        stage('Build Docker Images') {
             steps {
-                sh '''
-                    aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-                    aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-                    aws configure set region $AWS_REGION
-
-                    aws ecr get-login-password --region $AWS_REGION | \
-                    docker login --username AWS --password-stdin $ECR_REGISTRY
-                '''
-            }
-        }
-
-        stage('Build and Push hello-service') {
-            steps {
-                dir('backend/helloService') {
-                    sh '''
-                        docker build -t hello-service .
-                        docker tag hello-service:latest $ECR_REGISTRY/hello-service:latest
-                        docker push $ECR_REGISTRY/hello-service:latest
-                    '''
+                script {
+                    dir('backend/hello-service') {
+                        sh 'docker build -t hello-service:${IMAGE_TAG} .'
+                    }
+                    dir('backend/profile-service') {
+                        sh 'docker build -t profile-service:${IMAGE_TAG} .'
+                    }
+                    dir('frontend') {
+                        sh 'docker build -t frontend:${IMAGE_TAG} .'
+                    }
                 }
             }
         }
 
-        stage('Build and Push profile-service') {
-            steps {
-                dir('backend/profileService') {
-                    sh '''
-                        docker build -t profile-service .
-                        docker tag profile-service:latest $ECR_REGISTRY/profile-service:latest
-                        docker push $ECR_REGISTRY/profile-service:latest
-                    '''
-                }
+        stage('(Optional) Push to ECR') {
+            when {
+                expression { return false } // Skipping for now
             }
-        }
-
-        stage('Build and Push frontend') {
             steps {
-                dir('frontend') {
-                    sh '''
-                        docker build -t frontend-app .
-                        docker tag frontend-app:latest $ECR_REGISTRY/frontend-app:latest
-                        docker push $ECR_REGISTRY/frontend-app:latest
-                    '''
-                }
+                echo "Push to ECR skipped due to AWS credentials issue."
             }
         }
     }
