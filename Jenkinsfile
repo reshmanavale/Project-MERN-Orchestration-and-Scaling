@@ -15,10 +15,10 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 script {
-                    dir('backend/hello-service') {
+                    dir('backend/helloService') {
                         sh 'docker build -t hello-service:${IMAGE_TAG} .'
                     }
-                    dir('backend/profile-service') {
+                    dir('backend/profileService') {
                         sh 'docker build -t profile-service:${IMAGE_TAG} .'
                     }
                     dir('frontend') {
