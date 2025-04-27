@@ -3,9 +3,9 @@ import time
 
 # Global config
 REGION = "us-west-1"
-AMI_ID = "ami-0abcdef1234567890"  # 👉 Replace with your valid AMI ID
+AMI_ID = "ami-04f7a54071e74f488"  # 👉 Replace with your valid AMI ID
 INSTANCE_TYPE = "t2.micro"
-KEY_NAME = "your-keypair-name"    # 👉 Replace with your EC2 Key Pair name
+KEY_NAME = "Reshma-keypaire"    # 👉 Replace with your EC2 Key Pair name
 BACKEND_PORT = 3001               # Example backend port (hello-service runs here)
 
 ec2 = boto3.client('ec2', region_name=REGION)
