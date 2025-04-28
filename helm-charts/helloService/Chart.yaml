@@ -1,0 +1,6 @@
+apiVersion: v2
+name: hello-service
+description: A Helm chart for Hello Service
+type: application
+version: 0.1.0
+appVersion: "1.0"

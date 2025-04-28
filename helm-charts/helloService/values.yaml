@@ -1,0 +1,16 @@
+replicaCount: 2
+
+image:
+  repository: 975050024946.dkr.ecr.us-west-1.amazonaws.com/hello-service
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer    # Change this from ClusterIP to LoadBalancer
+  port: 80              # The port you want to expose
+  targetPort: 3001      # The target port on the container
+
+containerPort: 3001
+
+serviceAccount:
+  create: false
