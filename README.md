@@ -225,11 +225,16 @@ Install CloudWatch Agent as DaemonSet if needed.
 
 ## Step 12: Documentation
 
-Prepare **Architecture Diagram**, screenshots, and upload final GitHub README.md.
+ **Architecture Diagram**
+ 
 
 ---
 
-## Step 13: Final Checks
+## Step 13: Screenshots
+
+---
+
+## Step 14: Final Checks
 
 - Access Load Balancer URL.
 - Test all microservices.
