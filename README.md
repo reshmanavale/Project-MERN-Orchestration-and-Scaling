@@ -227,6 +227,7 @@ Install CloudWatch Agent as DaemonSet if needed.
 
  **Architecture Diagram**
  
+![Screenshot 2025-04-28 171016](https://github.com/user-attachments/assets/118c9cae-f9a3-4418-ad3f-22c86efef993)
 
 ---
 
