@@ -79,4 +79,13 @@ pipeline {
     post {
         always {
             echo "Cleaning up Docker environment"
-            sh 'docker system prune -af
+            sh 'docker system prune -af'
+        }
+        success {
+            echo "Docker images built and pushed to ECR successfully!"
+        }
+        failure {
+            echo "Something went wrong during the build or push process."
+        }
+    }
+}
