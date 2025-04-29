@@ -57,7 +57,7 @@ pipeline {
                 script {
                     sh """
                     docker tag frontend:${IMAGE_TAG} ${FRONTEND_ECR_URI}:${IMAGE_TAG}
-                    docker tag helloService:${IMAGE_TAG} ${HELLO_SERVICE_ECR_URI}:${IMAGE_TAG}
+                    docker tag hello-service:${IMAGE_TAG} ${HELLO_SERVICE_ECR_URI}:${IMAGE_TAG}
                     docker tag profile-service:${IMAGE_TAG} ${PROFILE_SERVICE_ECR_URI}:${IMAGE_TAG}
                     """
                 }
