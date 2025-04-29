@@ -45,8 +45,8 @@ pipeline {
                 script {
                     sh """
                     docker build -t frontend:${IMAGE_TAG} ./frontend
-                    docker build -t hello-service:${IMAGE_TAG} ./backend/hello-service
-                    docker build -t profile-service:${IMAGE_TAG} ./backend/profile-service
+                    docker build -t hello-service:${IMAGE_TAG} ./backend/helloService
+                    docker build -t profile-service:${IMAGE_TAG} ./backend/profileService
                     """
                 }
             }
@@ -57,7 +57,7 @@ pipeline {
                 script {
                     sh """
                     docker tag frontend:${IMAGE_TAG} ${FRONTEND_ECR_URI}:${IMAGE_TAG}
-                    docker tag hello-service:${IMAGE_TAG} ${HELLO_SERVICE_ECR_URI}:${IMAGE_TAG}
+                    docker tag helloService:${IMAGE_TAG} ${HELLO_SERVICE_ECR_URI}:${IMAGE_TAG}
                     docker tag profile-service:${IMAGE_TAG} ${PROFILE_SERVICE_ECR_URI}:${IMAGE_TAG}
                     """
                 }
