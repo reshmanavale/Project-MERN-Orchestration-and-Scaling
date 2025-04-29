@@ -5,7 +5,6 @@ pipeline {
         AWS_REGION = 'us-west-1'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
 
-        // ECR repository URIs (replace with your actual repo names if different)
         FRONTEND_ECR_URI = '975050024946.dkr.ecr.us-west-1.amazonaws.com/frontend-app'
         HELLO_SERVICE_ECR_URI = '975050024946.dkr.ecr.us-west-1.amazonaws.com/hello-service'
         PROFILE_SERVICE_ECR_URI = '975050024946.dkr.ecr.us-west-1.amazonaws.com/profile-service'
@@ -21,19 +20,21 @@ pipeline {
         stage('Login to ECR') {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: 'aws-creds', // ID of your stored Jenkins credentials
+                    credentialsId: 'aws-creds',  // Make sure this matches the ID in Jenkins credentials
                     usernameVariable: 'AWS_ACCESS_KEY_ID',
                     passwordVariable: 'AWS_SECRET_ACCESS_KEY'
                 )]) {
                     script {
-                        sh """
+                        sh '''
                         export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
                         export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-                        
+                        export AWS_DEFAULT_REGION=${AWS_REGION}
+
+                        echo "Logging into ECR..."
                         aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${FRONTEND_ECR_URI}
                         aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${HELLO_SERVICE_ECR_URI}
                         aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${PROFILE_SERVICE_ECR_URI}
-                        """
+                        '''
                     }
                 }
             }
@@ -51,7 +52,7 @@ pipeline {
             }
         }
 
-        stage('Tag Docker Images for ECR') {
+        stage('Tag Docker Images') {
             steps {
                 script {
                     sh """
