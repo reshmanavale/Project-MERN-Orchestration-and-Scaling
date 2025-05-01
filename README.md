@@ -298,24 +298,58 @@ def lambda_handler(event, context):
 # Project File Structure (Sample)
 
 ```
-📁 project-root
-├── 📁 backend
-│   ├── 📄 Dockerfile
-│   ├── 📄 deployment.yaml
-├── 📁 frontend
-│   ├── 📄 Dockerfile
-│   ├── 📄 deployment.yaml
-├── 📁 jenkins
-│   ├── 📄 frontend-pipeline.groovy
-│   ├── 📄 backend-pipeline.groovy
-├── 📁 terraform (optional)
-├── 📁 boto3-scripts
-│   ├── 📄 create_infra.py
-│   ├── 📄 create_lambda.py
-├── 📁 lambda
-│   ├── 📄 mongodb_backup_lambda.py
-├── 📄 eksctl-cluster.yaml
-├── 📄 README.md
+📁 project-root/
+│
+├── 📁 Boto3-Scripts/                   # Python scripts for automating AWS setup
+│   ├── create-listner.py
+│   ├── create_target_group.py
+│   └── full-infra-setup.py
+│
+├── 📁 backend/                         # Backend services
+│   ├── 📁 helloService/
+│   │   ├── Dockerfile
+│   │   ├── hello-deployment.yaml
+│   │   ├── hello-service.yaml
+│   │   ├── index.js
+│   │   ├── package.json
+│   │   └── package-lock.json
+│   │
+│   ├── 📁 profileService/
+│       ├── Dockerfile
+│       ├── profile-deployment.yaml (assumed)
+│       ├── profile-service.yaml (assumed)
+│       ├── index.js (if exists)
+│       ├── package.json
+│       └── package-lock.json
+│
+├── 📁 frontend/                        # Frontend React app
+│   ├── 📁 public/
+│   ├── 📁 src/
+│   ├── Dockerfile
+│   ├── frontend-deployment.yaml
+│   ├── frontend-service.yaml
+│   ├── package.json
+│   ├── package-lock.json
+│   └── README.md
+│
+├── 📁 helm-charts/                     # Helm charts for K8s deployment
+│   ├── 📁 frontend/
+│   │   ├── 📁 templates/
+│   │   │   ├── deployment.yaml
+│   │   │   └── service.yaml
+│   │   ├── .helmignore
+│   │   ├── Chart.yaml
+│   │   └── values.yaml
+│   │
+│   ├── 📁 helloService/               (assumed structure)
+│   └── 📁 profileService/             (assumed structure)
+│
+├── 📁 lambda-backup/                  # Lambda function for MongoDB backup
+│   └── mongodb_backup_lambda.py
+│
+├── 📄 Jenkinsfile                     # Jenkins pipeline definition
+├── 📄 README.md                       # Project documentation
+
 ```
 
 ---
