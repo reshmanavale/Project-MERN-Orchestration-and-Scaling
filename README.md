@@ -233,23 +233,35 @@ Install CloudWatch Agent as DaemonSet if needed.
 
 ## Step 13: Screenshots
 
--AWS ECR repo
+**-AWS ECR repo**
+
 ![image](https://github.com/user-attachments/assets/7a7ec5bc-33cd-478c-a91e-9894c5bbc8bf)
 
 
--jenkin pipeline execution
+**-jenkin pipeline execution:**
+
 ![image](https://github.com/user-attachments/assets/8072796d-784a-4ecf-bffc-8a0245fda7b3)
 
--Python script execution()
-![Screenshot 2025-04-28 070144](https://github.com/user-attachments/assets/1f136a19-b566-49d9-8f07-f5e37a92e4e0)
+**-Python script execution(VPC, subnets, security groups,ASG, ELB)**
+
 ![Screenshot 2025-04-28 072305](https://github.com/user-attachments/assets/e38107b4-4c95-4bc6-88e7-ced687b11fa1)
 ![Screenshot 2025-04-28 072324](https://github.com/user-attachments/assets/7a05a6aa-dcb6-4dcf-89b4-6abfc0e3644b)
 
+**-EKS Cluster:**
 
--EKS Cluster
 ![Screenshot 2025-04-28 072355](https://github.com/user-attachments/assets/43bd6c31-2ef5-47a1-94e1-be8cdaf3f68a)
 
+**-Deployment:**
+![Screenshot 2025-04-28 070144](https://github.com/user-attachments/assets/b87007a4-94f9-4a05-97bc-f752e9a25f88)
 
+**Frontend:**
+![Screenshot 2025-04-28 065232](https://github.com/user-attachments/assets/3d1dda3b-9ef4-41b1-9b9a-92e8e1400ab1)
+
+**Hello-service:**
+![Screenshot 2025-04-28 063911](https://github.com/user-attachments/assets/9a76ba94-f839-451e-9890-d5fc97945ca3)
+
+**Profile-service:**
+![Screenshot 2025-04-28 060843](https://github.com/user-attachments/assets/26d010a8-1184-4352-a39a-1a9c7b04cf0d)
 
 
 ---
